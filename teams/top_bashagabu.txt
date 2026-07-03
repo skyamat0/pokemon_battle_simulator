@@ -1,7 +1,7 @@
 Blaziken @ Blazikenite
 Ability: Speed Boost
 Level: 50
-EVs: 2 HP / 32 Atk / 32 Spe
+EVs: 14 HP / 32 Atk / 1 Def / 19 Spe
 Adamant Nature
 - Flare Blitz
 - High Jump Kick
@@ -11,7 +11,7 @@ Adamant Nature
 Garchomp @ Sitrus Berry
 Ability: Rough Skin
 Level: 50
-EVs: 32 HP / 32 Def / 2 SpD
+EVs: 32 HP / 25 Def / 7 SpD / 2 Spe
 Impish Nature
 - Earthquake
 - Dragon Tail
@@ -21,7 +21,7 @@ Impish Nature
 Corviknight @ Leftovers
 Ability: Pressure
 Level: 50
-EVs: 32 HP / 32 Def / 2 SpD
+EVs: 32 HP / 15 Def / 14 SpD / 5 Spe
 Impish Nature
 - Brave Bird
 - Bulk Up
@@ -31,7 +31,7 @@ Impish Nature
 Ninetales-Alola @ Light Clay
 Ability: Snow Warning
 Level: 50
-EVs: 32 HP / 2 Def / 32 Spe
+EVs: 29 HP / 19 SpA / 18 Spe
 Timid Nature
 - Freeze-Dry
 - Aurora Veil
@@ -41,7 +41,7 @@ Timid Nature
 Glimmora @ Focus Sash
 Ability: Toxic Debris
 Level: 50
-EVs: 2 HP / 32 SpA / 32 Spe
+EVs: 1 HP / 1 Def / 32 SpA / 32 Spe
 Timid Nature
 - Power Gem
 - Energy Ball
@@ -51,8 +51,8 @@ Timid Nature
 Samurott-Hisui @ Black Glasses
 Ability: Sharpness
 Level: 50
-EVs: 2 HP / 32 Atk / 32 Spe
-Jolly Nature
+EVs: 16 HP / 32 Atk / 3 Def / 1 SpD / 14 Spe
+Adamant Nature
 - Ceaseless Edge
 - Razor Shell
 - Sucker Punch
