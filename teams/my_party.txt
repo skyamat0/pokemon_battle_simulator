@@ -1,0 +1,59 @@
+Hydreigon @ Choice Scarf
+Ability: Levitate
+Level: 50
+EVs: 2 HP / 32 SpA / 32 Spe
+Timid Nature
+- Draco Meteor
+- Dark Pulse
+- Flamethrower
+- U-turn
+
+Meowscarada @ Focus Sash
+Ability: Protean
+Level: 50
+EVs: 2 HP / 32 Atk / 32 Spe
+Jolly Nature
+- Flower Trick
+- Taunt
+- U-turn
+- Knock Off
+
+Metagross @ Metagrossite
+Ability: Clear Body
+Level: 50
+EVs: 12 HP / 22 Atk / 32 Spe
+Jolly Nature
+- Iron Head
+- Ice Punch
+- Psychic Fangs
+- Bullet Punch
+
+Hippowdon @ Sitrus Berry
+Ability: Sand Stream
+Level: 50
+EVs: 32 HP / 32 Def / 2 SpD
+Impish Nature
+- Earthquake
+- Slack Off
+- Yawn
+- Stealth Rock
+
+Rotom-Wash @ Leftovers
+Ability: Levitate
+Level: 50
+EVs: 32 HP / 32 Def / 1 SpA / 1 SpD
+Bold Nature
+- Hydro Pump
+- Volt Switch
+- Thunderbolt
+- Will-O-Wisp
+
+Mimikyu @ Scope Lens
+Ability: Disguise
+Level: 50
+EVs: 13 HP / 27 Atk / 26 Def
+Adamant Nature
+- Play Rough
+- Shadow Sneak
+- Shadow Claw
+- Swords Dance

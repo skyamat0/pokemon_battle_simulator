@@ -1,7 +1,6 @@
 Garchomp @ Focus Sash
 Ability: Rough Skin
 Level: 50
-Tera Type: Steel
 EVs: 2 HP / 32 Atk / 32 Spe
 Jolly Nature
 - Earthquake
@@ -12,7 +11,6 @@ Jolly Nature
 Rotom-Wash @ Leftovers
 Ability: Levitate
 Level: 50
-Tera Type: Fairy
 EVs: 32 HP / 32 Def / 2 SpA
 Bold Nature
 - Hydro Pump
@@ -23,7 +21,6 @@ Bold Nature
 Corviknight @ Occa Berry
 Ability: Mirror Armor
 Level: 50
-Tera Type: Water
 EVs: 32 HP / 2 Atk / 32 Def
 Impish Nature
 - Brave Bird
@@ -34,7 +31,6 @@ Impish Nature
 Annihilape @ Lum Berry
 Ability: Vital Spirit
 Level: 50
-Tera Type: Water
 EVs: 32 HP / 2 Atk / 32 SpD
 Careful Nature
 - Rage Fist
@@ -45,7 +41,6 @@ Careful Nature
 Azumarill @ Sitrus Berry
 Ability: Huge Power
 Level: 50
-Tera Type: Water
 EVs: 32 HP / 32 Atk / 2 Def
 Adamant Nature
 - Aqua Jet
@@ -56,7 +51,6 @@ Adamant Nature
 Hippowdon @ Expert Belt
 Ability: Sand Stream
 Level: 50
-Tera Type: Steel
 EVs: 32 HP / 2 Atk / 32 SpD
 Careful Nature
 - Earthquake

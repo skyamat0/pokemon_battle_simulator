@@ -14,6 +14,14 @@ from poke_env import AccountConfiguration
 from poke_env.player import SimpleHeuristicsPlayer
 
 
+class NoTeraHeuristicsPlayer(SimpleHeuristicsPlayer):
+    """チャンピオンズ実機にテラスタルが無いため、bot のテラス使用を封じる"""
+
+    @staticmethod
+    def _should_terastallize(battle, move):
+        return False
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--team-a", required=True, help="A側パーティファイル")
@@ -45,12 +53,12 @@ async def run(args) -> None:
 
     # Showdown はログイン名を接続単位で占有するため、実行ごとに一意な名前にする
     run_id = datetime.datetime.now().strftime("%H%M%S")
-    player_a = SimpleHeuristicsPlayer(
+    player_a = NoTeraHeuristicsPlayer(
         account_configuration=AccountConfiguration(f"botA-{run_id}", None),
         battle_format=args.format, team=team_a,
         max_concurrent_battles=args.concurrency,
     )
-    player_b = SimpleHeuristicsPlayer(
+    player_b = NoTeraHeuristicsPlayer(
         account_configuration=AccountConfiguration(f"botB-{run_id}", None),
         battle_format=args.format, team=team_b,
         max_concurrent_battles=args.concurrency,

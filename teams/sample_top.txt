@@ -1,7 +1,6 @@
 Dragonite @ Lum Berry
 Ability: Multiscale
 Level: 50
-Tera Type: Normal
 EVs: 2 HP / 32 Atk / 32 Spe
 Adamant Nature
 - Extreme Speed
@@ -12,7 +11,6 @@ Adamant Nature
 Gholdengo @ Choice Scarf
 Ability: Good as Gold
 Level: 50
-Tera Type: Steel
 EVs: 2 HP / 32 SpA / 32 Spe
 Timid Nature
 - Make It Rain
@@ -23,7 +21,6 @@ Timid Nature
 Kingambit @ Black Glasses
 Ability: Supreme Overlord
 Level: 50
-Tera Type: Dark
 EVs: 32 HP / 32 Atk / 2 Def
 Adamant Nature
 - Kowtow Cleave
@@ -34,7 +31,6 @@ Adamant Nature
 Metagross @ Expert Belt
 Ability: Clear Body
 Level: 50
-Tera Type: Steel
 EVs: 32 HP / 32 Atk / 2 Def
 Adamant Nature
 - Meteor Mash
@@ -45,7 +41,6 @@ Adamant Nature
 Gyarados @ Leftovers
 Ability: Intimidate
 Level: 50
-Tera Type: Flying
 EVs: 2 HP / 32 Atk / 32 Spe
 Jolly Nature
 - Waterfall
@@ -56,7 +51,6 @@ Jolly Nature
 Dragapult @ Life Orb
 Ability: Infiltrator
 Level: 50
-Tera Type: Ghost
 EVs: 2 HP / 32 SpA / 32 Spe
 Timid Nature
 - Shadow Ball
