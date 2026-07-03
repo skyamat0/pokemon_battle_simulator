@@ -40,11 +40,8 @@ def main():
         ((w / t, w, t, k) for k, (w, t) in combo.items() if t >= args.min_n),
         reverse=True,
     )
-    for wr, w, t, k in ranked[:5]:
-        print(f"  {wr:6.1%} ({w}/{t})  {k}")
-    if len(ranked) > 10:
-        print("  ...")
-    for wr, w, t, k in ranked[-5:]:
+    shown = ranked[:5] + (ranked[-5:] if len(ranked) > 10 else ranked[5:])
+    for wr, w, t, k in shown:
         print(f"  {wr:6.1%} ({w}/{t})  {k}")
 
     # 自分の各ポケモン: 選出率・選出時勝率・被倒率

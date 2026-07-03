@@ -11,15 +11,31 @@ import json
 import pathlib
 
 from poke_env import AccountConfiguration
+from poke_env.battle.move import Move
 from poke_env.player import SimpleHeuristicsPlayer
+from poke_env.player.battle_order import SingleBattleOrder
 
 
-class NoTeraHeuristicsPlayer(SimpleHeuristicsPlayer):
-    """チャンピオンズ実機にテラスタルが無いため、bot のテラス使用を封じる"""
+class ChampionsHeuristicsPlayer(SimpleHeuristicsPlayer):
+    """チャンピオンズ実機仕様に合わせた bot: テラスタル封印・メガシンカ解禁。
+
+    SimpleHeuristicsPlayer は mega フラグを立てないため、
+    メガシンカ可能なターンは常に技オーダーに mega を付与する。
+    """
 
     @staticmethod
     def _should_terastallize(battle, move):
         return False
+
+    def choose_move(self, battle):
+        order = super().choose_move(battle)
+        if (
+            getattr(battle, "can_mega_evolve", False)
+            and isinstance(order, SingleBattleOrder)
+            and isinstance(order.order, Move)
+        ):
+            order.mega = True
+        return order
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -34,18 +50,23 @@ def build_parser() -> argparse.ArgumentParser:
 
 
 def battle_record(tag, battle) -> dict:
-    # opponent_team は「観測できた」相手ポケモンのみなので、
-    # b_* は選出3匹すべてが見えた場合のみ正確
+    # battle.team はロスター6匹を含むため、実際に場に出た個体(revealed)だけを選出とみなす。
+    # 種名は base_species で正規化(ばけのかわ剥がれ・メガ進化後のフォルム名を吸収)。
+    # opponent 側は「観測できた」ポケモンのみなので、選出3匹すべてが見えた場合のみ正確。
+    a_sent = [m for m in battle.team.values() if m.revealed]
+    b_seen = list(battle.opponent_team.values())
     return {
         "battle_tag": tag,
         "winner": "A" if battle.won else ("B" if battle.won is False else "tie"),
         "turns": battle.turn,
-        "a_selection": [m.species for m in battle.team.values()],
-        "a_fainted": [m.species for m in battle.team.values() if m.fainted],
-        "a_remaining": sum(not m.fainted for m in battle.team.values()),
-        "b_selection_seen": [m.species for m in battle.opponent_team.values()],
-        "b_fainted_seen": [m.species for m in battle.opponent_team.values() if m.fainted],
-        "b_remaining_seen": sum(not m.fainted for m in battle.opponent_team.values()),
+        "a_selection": sorted(m.base_species for m in a_sent),
+        "a_fainted": sorted(m.base_species for m in a_sent if m.fainted),
+        "a_remaining": sum(not m.fainted for m in a_sent),
+        "a_mega_used": any(m.species.endswith("mega") for m in a_sent),
+        "b_selection_seen": sorted(m.base_species for m in b_seen),
+        "b_fainted_seen": sorted(m.base_species for m in b_seen if m.fainted),
+        "b_remaining_seen": sum(not m.fainted for m in b_seen),
+        "b_mega_seen": any(m.species.endswith("mega") for m in b_seen),
     }
 
 
@@ -55,12 +76,12 @@ async def run(args) -> None:
 
     # Showdown はログイン名を接続単位で占有するため、実行ごとに一意な名前にする
     run_id = datetime.datetime.now().strftime("%H%M%S")
-    player_a = NoTeraHeuristicsPlayer(
+    player_a = ChampionsHeuristicsPlayer(
         account_configuration=AccountConfiguration(f"botA-{run_id}", None),
         battle_format=args.format, team=team_a,
         max_concurrent_battles=args.concurrency,
     )
-    player_b = NoTeraHeuristicsPlayer(
+    player_b = ChampionsHeuristicsPlayer(
         account_configuration=AccountConfiguration(f"botB-{run_id}", None),
         battle_format=args.format, team=team_b,
         max_concurrent_battles=args.concurrency,
