@@ -10,6 +10,7 @@ import datetime
 import json
 import pathlib
 
+from poke_env import AccountConfiguration
 from poke_env.player import SimpleHeuristicsPlayer
 
 
@@ -42,11 +43,15 @@ async def run(args) -> None:
     team_a = pathlib.Path(args.team_a).read_text()
     team_b = pathlib.Path(args.team_b).read_text()
 
+    # Showdown はログイン名を接続単位で占有するため、実行ごとに一意な名前にする
+    run_id = datetime.datetime.now().strftime("%H%M%S")
     player_a = SimpleHeuristicsPlayer(
+        account_configuration=AccountConfiguration(f"botA-{run_id}", None),
         battle_format=args.format, team=team_a,
         max_concurrent_battles=args.concurrency,
     )
     player_b = SimpleHeuristicsPlayer(
+        account_configuration=AccountConfiguration(f"botB-{run_id}", None),
         battle_format=args.format, team=team_b,
         max_concurrent_battles=args.concurrency,
     )
