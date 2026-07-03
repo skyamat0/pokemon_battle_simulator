@@ -20,7 +20,7 @@ Bold Nature
 - Will-O-Wisp
 - Protect
 
-Corviknight @ Leftovers
+Corviknight @ Occa Berry
 Ability: Mirror Armor
 Level: 50
 Tera Type: Water
@@ -31,7 +31,7 @@ Impish Nature
 - Iron Defense
 - Roost
 
-Annihilape @ Leftovers
+Annihilape @ Lum Berry
 Ability: Vital Spirit
 Level: 50
 Tera Type: Water
@@ -53,7 +53,7 @@ Adamant Nature
 - Liquidation
 - Belly Drum
 
-Ting-Lu @ Leftovers
+Ting-Lu @ Covert Cloak
 Ability: Vessel of Ruin
 Level: 50
 Tera Type: Poison
