@@ -19,7 +19,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument("--team-a", required=True, help="A側パーティファイル")
     parser.add_argument("--team-b", required=True, help="B側パーティファイル")
     parser.add_argument("-n", "--n-battles", type=int, default=100)
-    parser.add_argument("--format", default="gen9bssregi", help="バトルフォーマット")
+    parser.add_argument("--format", default="gen9championsbssregmb", help="バトルフォーマット")
     parser.add_argument("--concurrency", type=int, default=10, help="同時実行バトル数")
     parser.add_argument("--out-dir", default="logs", help="ログ出力先")
     return parser

@@ -1,8 +1,8 @@
-Dragonite @ Heavy-Duty Boots
+Dragonite @ Lum Berry
 Ability: Multiscale
 Level: 50
 Tera Type: Normal
-EVs: 4 HP / 252 Atk / 252 Spe
+EVs: 2 HP / 32 Atk / 32 Spe
 Adamant Nature
 - Extreme Speed
 - Earthquake
@@ -13,7 +13,7 @@ Gholdengo @ Choice Scarf
 Ability: Good as Gold
 Level: 50
 Tera Type: Steel
-EVs: 4 HP / 252 SpA / 252 Spe
+EVs: 2 HP / 32 SpA / 32 Spe
 Timid Nature
 - Make It Rain
 - Shadow Ball
@@ -24,40 +24,40 @@ Kingambit @ Black Glasses
 Ability: Supreme Overlord
 Level: 50
 Tera Type: Dark
-EVs: 252 HP / 252 Atk / 4 Def
+EVs: 32 HP / 32 Atk / 2 Def
 Adamant Nature
 - Kowtow Cleave
 - Sucker Punch
 - Iron Head
 - Swords Dance
 
-Great Tusk @ Booster Energy
-Ability: Protosynthesis
+Metagross @ Expert Belt
+Ability: Clear Body
 Level: 50
-Tera Type: Ground
-EVs: 4 HP / 252 Atk / 252 Spe
-Jolly Nature
-- Headlong Rush
-- Close Combat
-- Ice Spinner
-- Rapid Spin
-
-Dondozo @ Leftovers
-Ability: Unaware
-Level: 50
-Tera Type: Water
-EVs: 252 HP / 4 Atk / 252 Def
-Impish Nature
-- Liquidation
+Tera Type: Steel
+EVs: 32 HP / 32 Atk / 2 Def
+Adamant Nature
+- Meteor Mash
+- Zen Headbutt
+- Bullet Punch
 - Earthquake
-- Curse
-- Rest
 
-Dragapult @ Choice Specs
+Gyarados @ Leftovers
+Ability: Intimidate
+Level: 50
+Tera Type: Flying
+EVs: 2 HP / 32 Atk / 32 Spe
+Jolly Nature
+- Waterfall
+- Ice Fang
+- Dragon Dance
+- Protect
+
+Dragapult @ Life Orb
 Ability: Infiltrator
 Level: 50
 Tera Type: Ghost
-EVs: 4 HP / 252 SpA / 252 Spe
+EVs: 2 HP / 32 SpA / 32 Spe
 Timid Nature
 - Shadow Ball
 - Draco Meteor
