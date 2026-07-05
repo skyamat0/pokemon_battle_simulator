@@ -92,14 +92,41 @@ Showdown エクスポート形式。ただしチャンピオンズ仕様:
 - **Phase 3**: self-play RL 本格化(必要なら server を飛ばして sim 直結で高速化)
 - **Phase 4**: ユーザー対AI環境の整備、動画等の外部データ取り込み
 
+## Phase 2 の進捗(2026-07-05)
+
+metamon をフォークして Champions 対応を実装し、**学習パイプラインの疎通まで完了**:
+
+- **リプレイ再構成の Champions 対応**(ローカル `~/dev/metamon` の champions ブランチ):
+  3v3 選出 / champions 図鑑(新メガ92種・見た目フォルム) / メガ進化イベント /
+  持ち物なし許容 / 使用率統計のフォールバック / テラス任意化
+- **メガ判断の行動エンコード**: テラス枠(行動9-12)をメガに転用、can_mega 遷移も記録。
+  メガ温存(例: メガ前クリアボディで いかく を受けない)の判断が学習可能に
+- **使用率統計**: Smogon 公式統計(月次公開)を metamon 形式に変換
+  (`tools/build_champions_usage_stats.py`、毎月データ追加時は LATEST_USAGE_STATS_DATE も更新)
+- **最終データセット: 18,911軌跡**(M-A 15,747 + M-B 3,164、102MB)。
+  パース成功率: M-B 90.6% / M-A 93.9%(未完試合を除く実質 ~97%)
+- **語彙 `championsv1`**: 2,022トークン(`tools/build_champions_vocab.py`)
+- **学習 dry-run 成功**: 極小モデル(82k パラメータ)1エポックで検証精度22.8%
+  (13択ランダム≒8%)。コマンド例:
+  ```
+  METAMON_CACHE_DIR=~/dev/metamon_cache python -m metamon.il.train \
+    --run_name <name> --gpu 0 --formats gen9championsbssregmb gen9championsbssregma \
+    --parsed_replay_dir ~/dev/metamon_cache/parsed_champions \
+    --tokenizer championsv1 --base_obs_space TeamPreviewObservationSpace \
+    --model_config <gin> --epochs <n>
+  ```
+
 ## 次にやること
 
-1. **metamon コード調査** — 観測空間・軌跡形式・リプレイのプレイヤー視点再構成ツールが
-   チャンピオンズに流用できるか判断(https://github.com/UT-Austin-RPL/metamon)
-2. **FoulPlay 調査** — 探索ベースの強bot。champions mod で動けば診断用botの質が即改善
-3. PokéAgent 論文 Appendix D/E(ベースライン改良・優勝解法)の精読
-4. 特徴量エンコーダの実装(metamon 調査の結論を踏まえて)
-5. リプレイ→(状態, 行動)ペアへの変換パイプライン(模倣学習の前処理)
+1. **本学習(サーバー)**: GitHub に metamon フォーク用リポジトリを作成 → champions
+   ブランチを push → サーバーで本家サイズのモデルを学習(RTX 8000)
+2. **学習前の確認**: train/val 分割が試合単位(同一試合の2視点が同じ側)になっているか
+   検証・修正(リーク対策)
+3. **評価**: 学習済みモデルを診断パイプラインの heuristic bot と対戦させ勝率測定
+4. **型予測モデル**(v2): 制約推論(行動順→スカーフ検出、ダメージ逆算)+統計フォールバック段階化。
+   FoulPlay の対戦中推論エンジンを参考調査
+5. **観測空間 v2**: 期待ダメージ特徴、相手スタイル推定(深読みタイプ)特徴
+6. (v3以降)ドメイン知識ベースの報酬 shaping、self-play リーグ、Bo3 対応
 
 ## インフラのメモ
 
