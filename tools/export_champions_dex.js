@@ -74,6 +74,12 @@ const pokedex = {};
 for (const s of dex.species.all()) {
   if (!s.exists || s.num <= 0) continue; // CAP等は除外
   pokedex[s.id] = speciesEntry(s);
+  // 見た目違いフォルム(フラージェスの花色等)はリプレイに別名で現れるため、
+  // 本体と同データのエントリを別キーで登録しておく
+  for (const cosmetic of s.cosmeticFormes ?? []) {
+    const id = cosmetic.toLowerCase().replace(/[^a-z0-9]/g, "");
+    pokedex[id] = { ...speciesEntry(s), name: cosmetic };
+  }
 }
 
 const moves = {};
