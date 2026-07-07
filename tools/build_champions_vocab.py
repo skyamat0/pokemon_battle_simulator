@@ -26,14 +26,20 @@ from metamon.tokenizer import PokemonTokenizer
 VOCAB_BASE = os.path.join(
     os.path.dirname(__import__("metamon").__file__), "tokenizer", "allreplaysv3.json"
 )
-PARSED_DIR = os.path.expanduser("~/dev/metamon_cache/parsed_champions")
 
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--sample", type=int, default=None, help="先頭N軌跡のみ(見積もり用)")
     parser.add_argument("--out", default=None, help="語彙の保存先(省略時は保存しない)")
+    parser.add_argument(
+        "--parsed-dir",
+        default=os.path.expanduser("~/dev/metamon_cache/parsed_champions"),
+        help="パース済み軌跡のルートディレクトリ",
+    )
     args = parser.parse_args()
+    global PARSED_DIR
+    PARSED_DIR = os.path.expanduser(args.parsed_dir)
 
     tokenizer = PokemonTokenizer().load_tokens_from_disk(VOCAB_BASE)
     base_vocab_size = len(tokenizer)
