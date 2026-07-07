@@ -10,9 +10,28 @@ import asyncio
 import datetime
 
 from poke_env import AccountConfiguration
+from poke_env.environment.move import Move
+from poke_env.player import SimpleHeuristicsPlayer
 
-from battle_runner import ChampionsHeuristicsPlayer
 from champions_il_player import ChampionsILPlayer
+
+
+class ChampionsHeuristicsPlayer(SimpleHeuristicsPlayer):
+    """フォーク poke-env 版の Champions 対応 heuristic: テラス封印・メガ有効化。"""
+
+    @staticmethod
+    def _should_terastallize(*args, **kwargs):
+        return False
+
+    def choose_move(self, battle):
+        order = super().choose_move(battle)
+        if (
+            getattr(battle, "can_mega_evolve", False)
+            and getattr(order, "order", None) is not None
+            and isinstance(order.order, Move)
+        ):
+            order.mega = True
+        return order
 
 
 async def run(args):
