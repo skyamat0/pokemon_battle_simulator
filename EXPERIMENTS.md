@@ -9,7 +9,8 @@
 | il_dryrun_mac | 07-05 | BC | 82k (tiny) | M-B 3,136(ランダム分割) | 22.8%(1ep) | 41.3% | Mac CPU疎通確認 |
 | gpu_dryrun2 | 07-07 | BC | 82k (tiny) | M-A+M-B, 時間分割 | 22.8%(1ep) | 43.0% | サーバーGPU疎通・時間分割確認 |
 | **champions_il_v1** | 07-07 | BC | 1.4M | 全レート 42,018軌跡 / val=7/4以降454 | **38.1%**(11ep, 早期停止13ep) | 59.5% | eager実行(compile無効時代) |
-| champions_il_v15 | 07-07 | BC | ~14M | **レート1300+** 約14k軌跡 / 同val | (実行中) | | compile有効。データ1/3×モデル10倍 |
+| champions_il_v15 | 07-07 | BC | 7.3M | **レート1300+** 15,076試合 / val=7/4以降∩1300+ **96試合** | 23.9%(4ep) | — | **失敗(教訓あり)**: val 96試合では accuracy がノイズで暴れ、loss が単調改善中(1.90→1.69)なのに acc 基準の早期停止(patience2)が誤発動。※ v1 の38.1%とは val セットが違うため精度の直接比較は不可 |
+| champions_il_v15b | 07-07 | BC | 7.3M | 同上 / **val=7/1以降∩1300+(拡大)** | (実行中) | | 対策: loss 基準の早期停止 + patience 4。--patience/--early_stop_metric を CLI 化 |
 
 ## 対戦評価(100戦、選出ランダム、bot=ChampionsHeuristics)
 
