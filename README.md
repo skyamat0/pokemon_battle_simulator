@@ -156,7 +156,35 @@ grep "Validation Accuracy" ~/sakurai/train.log | tail -5
 |---|---|---|---|---|
 | **champions_il_v1**(2026-07-07) | 模倣学習のみ(1.4M) | 38.1% (Top-2 59.5%) | 21%(my_party vs top_rain・サンプリング手選択) | `~/sakurai/metamon/logs_and_checkpoints/champions_il_v1_trial1/ckpts/champions_il_v1_trial1_BEST.pt` |
 
-強化学習(オフラインRL)は未着手 — v2 の中心タスク。
+### 学習(オフラインRL)— BC の上に報酬で磨く
+
+模倣学習が「人間の手を真似る」のに対し、オフラインRLは報酬(勝敗+HP差の shaped 報酬)
+を使って「勝ちに繋がる手」へ寄せる。方策 π に加えて価値関数 Q を学習する。
+
+```bash
+cd ~/sakurai/metamon
+METAMON_CACHE_DIR=~/sakurai/metamon_cache WANDB_MODE=disabled \
+nohup ~/sakurai/metamon_env/bin/python -m metamon.rl.train \
+  --run_name <実験名> \
+  --model_gin_config champions_small_vanilla.gin \
+  --train_gin_config exp_rl.gin \
+  --dataset_config champions_human.yaml \
+  --parsed_replay_dir ~/sakurai/metamon_cache/parsed_champions \
+  --obs_space TeamPreviewObservationSpace --tokenizer championsv1 \
+  --action_space DefaultActionSpace --reward_function DefaultShapedReward \
+  --save_dir ~/sakurai/rl_checkpoints \
+  --epochs 100 --ckpt_interval 5 --eval_gens > ~/sakurai/train_rl.log 2>&1 &
+```
+
+- **成果物**: `~/sakurai/rl_checkpoints/<実験名>/ckpts/`(amago 形式のチェックポイント)
+- `--eval_gens`(引数なし)で学習中の対戦評価を無効化。有効にすると gen9OU の heuristic と
+  対戦するが、Champions とは別フォーマットなので現状は無意味 → 評価は eval_model.py で別途行う
+- **モデル構成の注意**: `champions_small_vanilla.gin` は本家 small_agent と同じ
+  Transformer 系列エンコーダ + `VanillaAttention`(flash-attn 非依存)。
+  **flash-attn は入れない** — FlashAttention2 は Ampere 以降専用で、サーバーの
+  Quadro RTX 8000(Turing)では動かないため。VanillaAttention は数学的に等価
+- BCモデルから継続したい場合は `python -m metamon.rl.finetune`(--base_model にBCチェックポイント)
+- `champions_human.yaml` は人間リプレイ100%(self-play データはまだ無い)
 
 ```bash
 # リプレイ再パース(データ更新時)と語彙再構築
