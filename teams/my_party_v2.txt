@@ -1,0 +1,59 @@
+Hydreigon @ Choice Scarf
+Ability: Levitate
+Level: 50
+EVs: 2 HP / 32 SpA / 32 Spe
+Timid Nature
+- Draco Meteor
+- Dark Pulse
+- Flamethrower
+- U-turn
+
+Meganium @ Meganiumite
+Ability: Overgrow
+Level: 50
+EVs: 32 HP / 2 Def / 32 Spe
+Modest Nature
+- Solar Beam
+- Weather Ball
+- Dazzling Gleam
+- Synthesis
+
+Metagross @ Metagrossite
+Ability: Clear Body
+Level: 50
+EVs: 12 HP / 22 Atk / 32 Spe
+Jolly Nature
+- Iron Head
+- Ice Punch
+- Psychic Fangs
+- Bullet Punch
+
+Hippowdon @ Sitrus Berry
+Ability: Sand Stream
+Level: 50
+EVs: 32 HP / 32 Def / 2 SpD
+Impish Nature
+- Earthquake
+- Slack Off
+- Yawn
+- Stealth Rock
+
+Ninetales-Alola @ Light Clay
+Ability: Snow Warning
+Level: 50
+EVs: 32 HP / 8 Def / 26 SpD
+Bold Nature
+- Blizzard
+- Aurora Veil
+- Chilling Water
+- Encore
+
+Skeledirge @ Leftovers
+Ability: Unaware
+Level: 50
+EVs: 32 HP / 32 Def / 2 Spe
+Bold Nature
+- Torch Song
+- Will-O-Wisp
+- Shadow Ball
+- Sunny Day

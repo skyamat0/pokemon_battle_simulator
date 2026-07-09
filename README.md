@@ -92,6 +92,78 @@ Showdown エクスポート形式。ただしチャンピオンズ仕様:
 - **Phase 3**: self-play RL 本格化(必要なら server を飛ばして sim 直結で高速化)
 - **Phase 4**: ユーザー対AI環境の整備、動画等の外部データ取り込み
 
+## v3.0 選出モデルのスコープ
+
+v2 の本走行評価は研究室 LAN 内サーバー上の成果物が必要なため、外部から評価できない間に
+v3.0 として選出モデルを先行実装する。目的は、6匹見せ合い時点で人間リプレイの選出3匹を
+どこまで再現できるかを測ること。バトル中の方策/Q/value モデルとは分離し、まずは
+`P(selected_3 | self_6, opp_6, self_sets)` を学習する。
+
+### v3.0 で入れる情報
+
+- **自分側6匹**: 選出時点で自分に見えている完全な型情報を使う
+  - 種族: species embedding + タイプ embedding + 実数値ステータス(HP/Atk/Def/SpA/SpD/Spe)
+  - 特性: ability embedding
+  - 持ち物: item embedding + `is_mega_stone` / `can_mega` フラグ
+  - 技: v3.0 では move embedding のみ。威力・命中・PP・優先度・追加効果フラグは入れない
+  - 性格: v3.0 では実数値ステータスに反映済みとして省略してよい。必要なら後で nature embedding を追加する
+- **相手側6匹**: 見せ合いで見えている種族情報だけを使う
+  - 種族: species embedding + タイプ embedding + base stats
+  - 持ち物/技/特性/性格/ステータスポイントは未知として扱い、実リプレイの未来情報は入れない
+- **モデル入力形式**:
+  - 各ポケモンを「カテゴリ embedding + 数値特徴量」から作る token として表現する
+  - 自分6 token と相手6 token を encoder/Transformer に渡し、20通りの選出集合を分類する
+  - 初手は別 head として追加可能にする
+
+### v3.0 ではまだ入れない情報
+
+- 技威力・命中・PP・優先度・追加効果フラグ
+- 相手の使用率統計に基づく期待型(item/move/ability 分布など)
+- 自分6匹 × 相手6匹の pairwise 相性特徴(最大打点、素早さ関係、確定数など)
+- ダメージ計算・受け出し評価・ステロ込みの縛り判定などの強いドメイン特徴
+- 特性/持ち物/技による威力・耐性・素早さ補正などの相互作用特徴
+
+これらは有効そうだが、まずは「見えている情報だけで選出を真似る」最小構成の性能を測り、
+v3.1 以降の改善要素として切り分ける。
+
+### v3.1 以降の特徴量追加ロードマップ
+
+- **v3.1**: 技の基本情報(base power, accuracy, pp, priority, 状態異常/積み/回復/設置/壁などのフラグ)
+- **v3.2**: 特性相互作用(例: Levitate の地面無効、Technician × 低威力技、天候特性による素早さ補正)
+- **v3.3**: 持ち物相互作用(例: Choice Band/Specs/Scarf, Assault Vest, Life Orb, Mega Stone)
+- **v3.4**: 技相互作用(move × type/stats/ability/item/opponent type、STAB、打点有無、概算火力)
+- **v3.5**: 自分6匹 × 相手6匹、選出3匹の補完、一貫して重い相手、受け先、勝ち筋などの全体相互作用
+
+詳細は [v3_ROADMAP.md](v3_ROADMAP.md) の `Phase 2.1` を参照。
+
+## v3.0 選出モデルの進捗(2026-07-09)
+
+- **v2 評価待ちの間に v3.0 を先行**: v2 本走行の成果物は研究室 LAN 内サーバー上にあり、外部から評価できないため、ローカルで選出モデルの前処理を進める方針にした
+- **Champions dex をJSON化**: `tools/export_champions_dex.js` で Champions 仕様の
+  `gen9pokedex.json` / `gen9moves.json` / `gen9items.json` を
+  `data/replays/pokedex_gen9championsregmb/` に出力できるようにした
+  - 現在の出力: species 1469 / moves 851 / items 583
+  - `staraptormega`, `electroshot`, `metagrossite` などを確認済み
+- **チームパーサを追加**: `v3/team_parser.py` で Showdown export 形式の `teams/*.txt` を読み、
+  `name_key`, `ability_key`, `item_key`, `move_keys`, `nature`, `points` を持つ辞書に変換できるようにした
+- **現在の自パーティを整備**: `teams/my_party_v2.txt` を現在使用中のパーティに更新し、日本語表記を英語表記へ変換済み
+- **自分側/相手側の特徴量変換プロトタイプを追加**: `v3/feature.py` で以下を実装した
+  - 性格補正辞書 `NATURE_MODIFIERS`
+  - Champions のステータスポイント + 性格による実数値計算
+  - 自分ポケモン: species/types/stats/ability/item/mega/form/moves/weight
+  - 相手ポケモン: species/types/base_stats/has_mega_form/weight
+- **選出モデルと方策モデルは分離する方針で確定**:
+  - 選出モデル: 6匹見せ合い時点で3匹を選ぶ
+  - 方策モデル: 選ばれた3匹のもとで毎ターンの行動を選ぶ
+  - 最終的には `SelectionModel -> PolicyModel` のパイプラインで接続する
+
+次にやること:
+
+- `self_pokemon_feature_convert` の技出力を v3.0 方針に合わせて、full move dex ではなく `move_keys` 中心に整理する
+- 6匹単位の `team_feature_convert` を作る
+- 相手6匹の preview パーサ/特徴量変換を作る
+- 20通りの選出集合ラベルを作るデータセット生成へ進む
+
 ## 現状サマリ(2026-07-08 更新)
 
 - **模倣学習(BC)の初号機 champions_il_v1 完成**: 人間リプレイ ~19,000軌跡で訓練、

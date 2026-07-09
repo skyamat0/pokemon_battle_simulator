@@ -3,7 +3,7 @@
 // 使い方:
 //   node tools/export_champions_dex.js <showdown_root> <out_dir>
 //
-// 出力: <out_dir>/gen9pokedex.json, <out_dir>/gen9moves.json
+// 出力: <out_dir>/gen9pokedex.json, <out_dir>/gen9moves.json, <out_dir>/gen9items.json
 // (metamon/backend/showdown_dex/static/{pokemon,moves}/ の gen9 ファイルを置き換える)
 
 const path = require("path");
@@ -15,7 +15,8 @@ if (!showdownRoot || !outDir) {
   process.exit(1);
 }
 
-const { Dex } = require(path.join(showdownRoot, "dist/sim/dex"));
+const resolvedShowdownRoot = path.resolve(showdownRoot);
+const { Dex } = require(path.join(resolvedShowdownRoot, "dist/sim/dex"));
 const dex = Dex.mod("champions");
 
 // poke-env / metamon の gen9pokedex.json と同じフィールド構成に揃える
@@ -70,6 +71,26 @@ function moveEntry(m) {
   return entry;
 }
 
+function itemEntry(i) {
+  const entry = {
+    name: i.name,
+    num: i.num,
+    spritenum: i.spritenum,
+    isNonstandard: i.isNonstandard ?? null,
+  };
+  if (i.megaStone) entry.megaStone = i.megaStone;
+  if (i.megaEvolves) entry.megaEvolves = i.megaEvolves;
+  if (i.itemUser) entry.itemUser = i.itemUser;
+  if (i.forcedForme) entry.forcedForme = i.forcedForme;
+  if (i.onPlate) entry.onPlate = i.onPlate;
+  if (i.onDrive) entry.onDrive = i.onDrive;
+  if (i.isBerry) entry.isBerry = i.isBerry;
+  if (i.naturalGift) entry.naturalGift = i.naturalGift;
+  if (i.fling) entry.fling = i.fling;
+  if (i.shortDesc) entry.shortDesc = i.shortDesc;
+  return entry;
+}
+
 const pokedex = {};
 for (const s of dex.species.all()) {
   if (!s.exists || s.num <= 0) continue; // CAP等は除外
@@ -88,9 +109,17 @@ for (const m of dex.moves.all()) {
   moves[m.id] = moveEntry(m);
 }
 
+const items = {};
+for (const i of dex.items.all()) {
+  if (!i.exists) continue;
+  items[i.id] = itemEntry(i);
+}
+
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(path.join(outDir, "gen9pokedex.json"), JSON.stringify(pokedex));
 fs.writeFileSync(path.join(outDir, "gen9moves.json"), JSON.stringify(moves));
-console.log(`species: ${Object.keys(pokedex).length}, moves: ${Object.keys(moves).length}`);
+fs.writeFileSync(path.join(outDir, "gen9items.json"), JSON.stringify(items));
+console.log(`species: ${Object.keys(pokedex).length}, moves: ${Object.keys(moves).length}, items: ${Object.keys(items).length}`);
 console.log(`staraptormega: ${pokedex.staraptormega ? "OK" : "MISSING"}`);
 console.log(`electroshot 威力: ${moves.electroshot ? moves.electroshot.basePower : "MISSING"}`);
+console.log(`metagrossite: ${items.metagrossite?.megaStone ? "OK" : "MISSING"}`);
